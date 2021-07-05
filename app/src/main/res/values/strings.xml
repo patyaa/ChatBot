@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ChatBot</string>
+    <string name="say_something">Say something</string>
+    <string name="send">Send</string>
+</resources>

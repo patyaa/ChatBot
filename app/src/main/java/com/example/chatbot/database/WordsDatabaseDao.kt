@@ -9,7 +9,7 @@ import androidx.room.Update
 @Dao
 interface WordsDatabaseDao {
     @Insert
-    suspend fun insert(word: Words)
+    fun insert(word: Words)
 
     @Insert
     fun insertFirstWord(word: Words)
@@ -24,8 +24,8 @@ interface WordsDatabaseDao {
     suspend fun clear()
 
     @Query("SELECT * FROM words_table ORDER BY wordId DESC")
-    fun getAllNights(): LiveData<List<Words>>
+    fun getAllWords(): LiveData<List<Words>>
 
     @Query("SELECT * FROM words_table ORDER BY wordId DESC LIMIT 1")
-    suspend fun getTonight(): Words?
+    suspend fun getCurrentWord(): Words?
 }

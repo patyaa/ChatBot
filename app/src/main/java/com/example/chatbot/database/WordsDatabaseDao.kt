@@ -11,4 +11,6 @@ interface WordsDatabaseDao {
     @Query("SELECT * FROM words_table ORDER BY RANDOM() LIMIT 1")
     suspend fun getResponse(): Words
 
+    @Query("DELETE FROM words_table")
+    suspend fun clear()
 }

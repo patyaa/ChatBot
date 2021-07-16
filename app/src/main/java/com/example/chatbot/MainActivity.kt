@@ -3,9 +3,11 @@ package com.example.chatbot
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.chatbot.database.WordsDatabase
 import com.example.chatbot.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -18,6 +20,17 @@ class MainActivity : AppCompatActivity() {
 
         binding = setViewContent(this)
         binding.viewModel = viewModel
+
+        viewModel.showSnackbarEvent.observe(this, Observer {
+            if(it == true){
+                Snackbar.make(
+                    this.findViewById(android.R.id.content),
+                    getString(R.string.cleared_message),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                viewModel.doneShowingSnackbar()
+            }
+        })
     }
 
     private fun createViewModel(): MainViewModel{

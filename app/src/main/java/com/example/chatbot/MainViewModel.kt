@@ -1,5 +1,6 @@
 package com.example.chatbot
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,14 @@ class MainViewModel(val database: WordsDatabaseDao) : ViewModel() {
     val chat = MutableLiveData<String>()
     val message = MutableLiveData<String>()
 
+    private var _showSnackBarEvent = MutableLiveData<Boolean>()
+    val showSnackbarEvent: LiveData<Boolean>
+        get() = _showSnackBarEvent
+
+
+    fun doneShowingSnackbar(){
+        _showSnackBarEvent.value = false
+    }
 
     fun onSend() {
         message.value?.let { msg ->
@@ -29,6 +38,14 @@ class MainViewModel(val database: WordsDatabaseDao) : ViewModel() {
         }
     }
 
+    fun onClear() {
+        viewModelScope.launch {
+            clear()
+
+            _showSnackBarEvent.value = true
+        }
+    }
+
     private suspend fun insert(word: Words) {
         withContext(Dispatchers.IO) {
             database.insert(word)
@@ -38,6 +55,12 @@ class MainViewModel(val database: WordsDatabaseDao) : ViewModel() {
     private suspend fun getResponse(): Words {
         return withContext(Dispatchers.IO) {
             database.getResponse()
+        }
+    }
+
+    private suspend fun clear() {
+        withContext(Dispatchers.IO) {
+            database.clear()
         }
     }
 }

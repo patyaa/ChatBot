@@ -18,8 +18,7 @@ class MainViewModel(val database: WordsDatabaseDao) : ViewModel() {
     val showSnackbarEvent: LiveData<Boolean>
         get() = _showSnackBarEvent
 
-
-    fun doneShowingSnackbar(){
+    fun doneShowingSnackbar() {
         _showSnackBarEvent.value = false
     }
 
@@ -33,15 +32,18 @@ class MainViewModel(val database: WordsDatabaseDao) : ViewModel() {
                 val response = getResponse()
 
                 //Válasz kiírása
-                chat.value = chat.value + "\n" + message.value + "\n" + response.words + "\n"
+                updateChat(response)
             }
         }
+    }
+
+   private fun updateChat(response: Words){
+        chat.value = chat.value + "\n" + message.value + "\n" + response.words + "\n"
     }
 
     fun onClear() {
         viewModelScope.launch {
             clear()
-
             _showSnackBarEvent.value = true
         }
     }

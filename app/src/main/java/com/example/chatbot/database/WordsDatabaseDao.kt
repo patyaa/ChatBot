@@ -1,6 +1,7 @@
 package com.example.chatbot.database
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 
 @Dao

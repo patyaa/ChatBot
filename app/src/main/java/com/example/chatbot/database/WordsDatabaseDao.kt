@@ -1,31 +1,14 @@
 package com.example.chatbot.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface WordsDatabaseDao {
-    @Insert
-    fun insert(word: Words)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(string: Words)
 
-    @Insert
-    fun insertFirstWord(word: Words)
+    @Query("SELECT * FROM words_table ORDER BY RANDOM() LIMIT 1")
+    suspend fun getResponse(): Words
 
-    @Update
-    suspend fun update(word: Words)
-
-    @Query("SELECT * FROM words_table WHERE wordId = :key")
-    suspend fun get(key: Long): Words
-
-    @Query("DELETE FROM words_table")
-    suspend fun clear()
-
-    @Query("SELECT * FROM words_table ORDER BY wordId DESC")
-    fun getAllWords(): LiveData<List<Words>>
-
-    @Query("SELECT * FROM words_table ORDER BY wordId DESC LIMIT 1")
-    suspend fun getCurrentWord(): Words?
 }

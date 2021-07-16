@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.chatbot.MainViewModel" />
@@ -25,8 +26,8 @@
                 android:id="@+id/chat_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="@{viewModel.chat}"/>
+                android:text="@{viewModel.chat}"
+                app:layout_constraintTop_toTopOf="parent" />
         </ScrollView>
 
 
@@ -36,24 +37,24 @@
             android:layout_height="wrap_content"
             android:hint="@string/say_something"
             android:inputType="text"
+            android:text="@={viewModel.message}"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.85"
-            android:text="@={viewModel.message}"/>
+            app:layout_constraintVertical_bias="0.81" />
 
         <Button
             android:id="@+id/send_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:onClick="@{()->viewModel.onSend()}"
             android:text="@string/send"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/message"
-            android:onClick="@{()->viewModel.onSend()}"/>
+            app:layout_constraintTop_toBottomOf="@+id/message" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -22,7 +22,7 @@ abstract class WordsDatabase : RoomDatabase() {
                         context.applicationContext,
                         WordsDatabase::class.java,
                         "sleep_history_database"
-                    ).fallbackToDestructiveMigration()
+                    ).fallbackToDestructiveMigration().allowMainThreadQueries()
                         .build()
                     INSTANCE = instance
                 }

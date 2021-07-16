@@ -13,4 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-.log
+hs_err_pid9052.log

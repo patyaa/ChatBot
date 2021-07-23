@@ -1,14 +1,13 @@
 package com.example.chatbot
 
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.chatbot.database.WordsDatabase
 import com.example.chatbot.databinding.ActivityMainBinding
-import java.util.*
-import kotlin.collections.ArrayList
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -16,14 +15,39 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        viewModel = createViewModel()
+
         binding = setViewContent(this)
         binding.viewModel = viewModel
+
+        viewModel.showSnackbarEvent.observe(this, Observer {
+            if(it == true){
+                Snackbar.make(
+                    this.findViewById(android.R.id.content),
+                    getString(R.string.cleared_message),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                viewModel.doneShowingSnackbar()
+            }
+        })
+    }
+
+    private fun createViewModel(): MainViewModel{
+        val application = requireNotNull(this).application
+
+        val dataSource = WordsDatabase.getInstance(application).wordsDatabaseDao
+
+        val viewModelFactory = MainViewModelFactory(dataSource)
+
+        return ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
     }
 
     private fun setViewContent(activity: MainActivity): ActivityMainBinding {
-        val binding : ActivityMainBinding = DataBindingUtil.setContentView(activity, R.layout.activity_main)
+        val binding: ActivityMainBinding =
+            DataBindingUtil.setContentView(activity, R.layout.activity_main)
         binding.lifecycleOwner = activity
         return binding
     }
+
 }

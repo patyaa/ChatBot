@@ -31,6 +31,14 @@ class MainActivity : AppCompatActivity() {
                 viewModel.doneShowingSnackbar()
             }
         })
+
+        val adapter = WordsAdapter()
+        binding.wordsList.adapter = adapter
+        viewModel.allWords.observe(this, Observer {
+            it?.let {
+                adapter.data = it
+            }
+        })
     }
 
     private fun createViewModel(): MainViewModel{

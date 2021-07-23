@@ -14,4 +14,7 @@ interface WordsDatabaseDao {
 
     @Query("DELETE FROM words_table")
     suspend fun clear()
+
+    @Query("SELECT * FROM words_table")
+    fun getAllWords(): LiveData<List<Words>>
 }

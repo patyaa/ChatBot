@@ -13,6 +13,7 @@ import kotlinx.coroutines.withContext
 class MainViewModel(val database: WordsDatabaseDao) : ViewModel() {
     val chat = MutableLiveData<String>()
     val message = MutableLiveData<String>()
+    val allWords = database.getAllWords()
 
     private var _showSnackBarEvent = MutableLiveData<Boolean>()
     val showSnackbarEvent: LiveData<Boolean>

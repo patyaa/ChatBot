@@ -37,7 +37,7 @@ class MainViewModel(val database: WordsDatabaseDao) : ViewModel() {
         }
     }
 
-   private fun updateChat(response: Words){
+    private fun updateChat(response: Words) {
         chat.value = chat.value + "\n" + message.value + "\n" + response.words + "\n"
     }
 

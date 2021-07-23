@@ -1,19 +1,21 @@
 package com.example.chatbot
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatbot.database.Words
 import com.example.chatbot.database.WordsDatabaseDao
+import com.example.chatbot.model.Message
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainViewModel(val database: WordsDatabaseDao) : ViewModel() {
-    val chat = MutableLiveData<String>()
     val message = MutableLiveData<String>()
-    val allWords = database.getAllWords()
+
+    val messages = MutableLiveData<List<Message>>()
 
     private var _showSnackBarEvent = MutableLiveData<Boolean>()
     val showSnackbarEvent: LiveData<Boolean>
@@ -29,17 +31,20 @@ class MainViewModel(val database: WordsDatabaseDao) : ViewModel() {
                 //User válaszát elmenteni adatbázisba
                 insert(Words(msg))
 
-                //Kereseen rá választ
+                //Keressen rá választ
                 val response = getResponse()
 
-                //Válasz kiírása
-                updateChat(response)
+                //Kérdés és válasz kiírása
+                updateChat(msg, response.words)
             }
         }
     }
 
-    private fun updateChat(response: Words) {
-        chat.value = chat.value + "\n" + message.value + "\n" + response.words + "\n"
+    private fun updateChat(question: String, answer: String) {
+        messages.value = messages.value.orEmpty().toMutableList().apply {
+            add(Message(Color.GREEN, question))
+            add(Message(Color.GRAY, answer))
+        }
     }
 
     fun onClear() {

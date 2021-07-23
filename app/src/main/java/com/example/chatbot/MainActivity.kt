@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = WordsAdapter()
         binding.wordsList.adapter = adapter
-        viewModel.allWords.observe(this, Observer {
+        viewModel.messages.observe(this, Observer {
             it?.let {
                 adapter.data = it
             }

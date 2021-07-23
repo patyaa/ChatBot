@@ -2,14 +2,21 @@ package com.example.chatbot
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.chatbot.database.Words
+import com.example.chatbot.databinding.TextItemViewBinding
+import com.example.chatbot.model.Message
 
-class TextItemViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
+class TextItemViewHolder(private val binding: TextItemViewBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
-class WordsAdapter: RecyclerView.Adapter<TextItemViewHolder>() {
-    var data = listOf<Words>()
+    fun bind(message: Message) {
+        binding.content.text = message.content
+        binding.image.setColorFilter(message.senderColor)
+    }
+}
+
+class WordsAdapter : RecyclerView.Adapter<TextItemViewHolder>() {
+    var data = listOf<Message>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -18,14 +25,21 @@ class WordsAdapter: RecyclerView.Adapter<TextItemViewHolder>() {
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: TextItemViewHolder, position: Int) {
-        val item = data[position]
-        holder.textView.text = item.words
+        holder.bind(data[position])
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextItemViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.text_item_view, parent, false) as TextView
-        return TextItemViewHolder(view)
+        val binding = createBinding(layoutInflater, parent)
+        return TextItemViewHolder(binding)
+    }
+
+    private fun createBinding(layoutInflater : LayoutInflater, parent: ViewGroup) = TextItemViewBinding.inflate(layoutInflater, parent, false).apply {
+        val lp = RecyclerView.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        root.setLayoutParams(lp)
     }
 }
 
